@@ -1,11 +1,14 @@
 package org.example.graphingcalculator;
 
-import java.util.function.*;
+import org.example.graphingcalculator.expressions.AdditionCompoundExpression;
+import org.example.graphingcalculator.expressions.Expression;
+import org.example.graphingcalculator.expressions.LiteralExpression;
+import org.example.graphingcalculator.expressions.VariableExpression;
 
 public class SimpleExpressionParser implements ExpressionParser {
-        /*
-         * Attempts to create an expression tree from the specified String.
-         * Throws a ExpressionParseException if the specified string cannot be parsed.
+	/**
+	 * Attempts to create an expression tree from the specified String.
+	 * Throws a ExpressionParseException if the specified string cannot be parsed.
 	 * Grammar:
 	 * S -> A | P
 	 * A -> A+M | A-M | M
@@ -14,38 +17,73 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * P -> (S) | L | V
 	 * L -> <float>
 	 * V -> x
-         * @param str the string to parse into an expression tree
-         * @return the Expression object representing the parsed expression tree
-         */
+	 * @param str the string to parse into an expression tree
+	 * @return the Expression object representing the parsed expression tree
+	 */
 	public Expression parse (String str) throws ExpressionParseException {
 		str = str.replaceAll(" ", "");
-		Expression expression = parseAdditiveExpression(str);
+		Expression expression = validateExpression(str);
 		if (expression == null) {
 			throw new ExpressionParseException("Cannot parse expression: " + str);
 		}
 
 		return expression;
 	}
+
+	protected Expression validateExpression(String str) {
+		Expression expression = parseParentheticalExpression(str);
+		if (expression == null) {
+			expression = parseAdditiveExpression(str);
+		}
+		return expression;
+	}
+
+	protected Expression parseParentheticalExpression (String str) {
+		int leftParenthesis = 0;
+		int rightParenthesis = str.length() - 1;
+
+		if (str.length() > 2 &&
+			str.charAt(leftParenthesis) == '(' &&
+			str.charAt(rightParenthesis) == ')') {
+
+			return validateExpression(str.substring(leftParenthesis + 1, rightParenthesis));
+		}
+
+		Expression expression = parseLiteralExpression(str);
+
+		if (expression == null) {
+			expression = parseVariableExpression(str);
+		}
+
+		return expression;
+	}
 	
 	protected Expression parseAdditiveExpression (String str) {
-		Expression expression;
 
-		// TODO: implement me
-		
+		for (int i = 0; i < str.length(); i++) {
+			if (str.charAt(i) == '+') {
+				Expression left = validateExpression(str.substring(0, i));
+				Expression right = validateExpression(str.substring(i+1));
+
+				if (left != null || right != null) {
+					return null;
+				}
+
+				return new AdditionCompoundExpression(left, right);
+			}
+		}
+
 		return null;
 	}
 
-        // TODO: once you implement a VariableExpression class, fix the return-type below.
-        protected /*Variable*/Expression parseVariableExpression (String str) {
-                if (str.equals("x")) {
-                        // TODO implement the VariableExpression class and uncomment line below
-                        // return new VariableExpression();
-                }
-                return null;
-        }
+	protected VariableExpression parseVariableExpression (String str) {
+		if (str.equals("x")) {
+			return new VariableExpression();
+		}
+		return null;
+	}
 
-        // TODO: once you implement a LiteralExpression class, fix the return-type below.
-	protected /*Literal*/Expression parseLiteralExpression (String str) {
+	protected LiteralExpression parseLiteralExpression (String str) {
 		// From https://stackoverflow.com/questions/3543729/how-to-check-that-a-string-is-parseable-to-a-double/22936891:
 		final String Digits     = "(\\p{Digit}+)";
 		final String HexDigits  = "(\\p{XDigit}+)";
@@ -87,10 +125,9 @@ public class SimpleExpressionParser implements ExpressionParser {
 		    "[\\x00-\\x20]*");// Optional trailing "whitespace"
 
 		if (str.matches(fpRegex)) {
-			return null;
-			// TODO: Once you implement LiteralExpression, replace the line above with the line below:
-			// return new LiteralExpression(str);
+			return new LiteralExpression(str);
 		}
+
 		return null;
 	}
 

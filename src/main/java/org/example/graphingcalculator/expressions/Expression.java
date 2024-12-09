@@ -1,16 +1,16 @@
-package org.example.graphingcalculator;//import javafx.scene.layout.*;
+package org.example.graphingcalculator.expressions;//import javafx.scene.layout.*;
 //import javafx.scene.paint.Color;
 //import javafx.scene.Node;
 
 /** Note: You may <b>not</b> change or remove any of the methods listed below. */
-interface Expression {
-        /**
-         * Creates and returns a deep copy of the expression.
-         * The entire tree rooted at the target node is copied, i.e.,
-         * the copied Expression is as deep as possible.
-         * @return the deep copy
-         */
-        Expression deepCopy ();
+public interface Expression {
+	/**
+	 * Creates and returns a deep copy of the expression.
+	 * The entire tree rooted at the target node is copied, i.e.,
+	 * the copied Expression is as deep as possible.
+	 * @return the deep copy
+	 */
+	Expression deepCopy ();
 
 	/**
 	 * Creates a String representation of this expression with a given starting

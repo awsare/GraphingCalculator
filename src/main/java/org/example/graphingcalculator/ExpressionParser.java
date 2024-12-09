@@ -1,5 +1,7 @@
 package org.example.graphingcalculator;
 
+import org.example.graphingcalculator.expressions.Expression;
+
 interface ExpressionParser {
 	/**
 	 * Attempts to create an expression tree -- flattened as much as possible -- from the specified String.
