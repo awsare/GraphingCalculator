@@ -1,9 +1,6 @@
 package org.example.graphingcalculator;
 
-import org.example.graphingcalculator.expressions.AdditionCompoundExpression;
-import org.example.graphingcalculator.expressions.Expression;
-import org.example.graphingcalculator.expressions.ConstantExpression;
-import org.example.graphingcalculator.expressions.VariableExpression;
+import org.example.graphingcalculator.expressions.*;
 
 public class SimpleExpressionParser implements ExpressionParser {
 	/**

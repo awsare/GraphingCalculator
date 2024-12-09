@@ -1,17 +1,17 @@
 package org.example.graphingcalculator.expressions;
 
 public class ExponentialCompoundExpression implements Expression {
-    private final Expression left;
-    private final Expression right;
+    private final Expression base;
+    private final Expression exponent;
 
-    public ExponentialCompoundExpression(Expression left, Expression right) {
-        this.left = left;
-        this.right = right;
+    public ExponentialCompoundExpression(Expression base, Expression exponent) {
+        this.base = base;
+        this.exponent = exponent;
     }
 
     @Override
     public Expression deepCopy() {
-        return new ExponentialCompoundExpression(left, right);
+        return new ExponentialCompoundExpression(base, exponent);
     }
 
     @Override
@@ -22,11 +22,14 @@ public class ExponentialCompoundExpression implements Expression {
 
     @Override
     public double evaluate(double x) {
-        return Math.pow(left.evaluate(x), right.evaluate(x));
+        return Math.pow(base.evaluate(x), exponent.evaluate(x));
     }
 
     @Override
     public Expression differentiate() {
+        if (base instanceof ConstantExpression) {
+            return new MultiplicationCompoundExpression(new NaturalLogarithmicExpression(base), new MultiplicationCompoundExpression(new ExponentialCompoundExpression(base, exponent), exponent.differentiate()));
+        }
         return null;
     }
 }
