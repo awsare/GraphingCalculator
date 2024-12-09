@@ -11,7 +11,7 @@ public class AdditionCompoundExpression implements Expression {
 
     @Override
     public Expression deepCopy() {
-        return new AdditionCompoundExpression(left, right);
+        return new AdditionCompoundExpression(left.deepCopy(), right.deepCopy());
     }
 
     @Override

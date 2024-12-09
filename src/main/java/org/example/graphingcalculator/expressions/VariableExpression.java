@@ -23,6 +23,6 @@ public class VariableExpression implements Expression {
 
     @Override
     public Expression differentiate() {
-        return new LiteralExpression("1");
+        return new ConstantExpression("1");
     }
 }

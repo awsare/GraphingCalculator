@@ -28,7 +28,7 @@ public class MultiplicationCompoundExpression implements Expression {
 
     @Override
     public double evaluate(double x) {
-        return left.evaluate(x) + right.evaluate(x);
+        return left.evaluate(x) * right.evaluate(x);
     }
 
     @Override

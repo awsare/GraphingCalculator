@@ -1,15 +1,15 @@
 package org.example.graphingcalculator.expressions;
 
-public class LiteralExpression implements Expression {
+public class ConstantExpression implements Expression {
     private final String value;
 
-    public LiteralExpression(String value) {
+    public ConstantExpression(String value) {
         this.value = value;
     }
 
     @Override
     public Expression deepCopy() {
-        return new LiteralExpression(value);
+        return new ConstantExpression(value);
     }
 
     @Override
@@ -29,6 +29,6 @@ public class LiteralExpression implements Expression {
 
     @Override
     public Expression differentiate() {
-        return new LiteralExpression("0");
+        return new ConstantExpression("0");
     }
 }

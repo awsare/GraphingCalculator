@@ -2,7 +2,7 @@ package org.example.graphingcalculator;
 
 import org.example.graphingcalculator.expressions.AdditionCompoundExpression;
 import org.example.graphingcalculator.expressions.Expression;
-import org.example.graphingcalculator.expressions.LiteralExpression;
+import org.example.graphingcalculator.expressions.ConstantExpression;
 import org.example.graphingcalculator.expressions.VariableExpression;
 
 public class SimpleExpressionParser implements ExpressionParser {
@@ -70,6 +70,15 @@ public class SimpleExpressionParser implements ExpressionParser {
 				}
 
 				return new AdditionCompoundExpression(left, right);
+			} else if (str.charAt(i) == '-') {
+				Expression left = validateExpression(str.substring(0, i));
+				Expression right = validateExpression(str.substring(i+1));
+
+				if (left != null || right != null) {
+					return null;
+				}
+
+				return new SubtractionCompoundExpression(left, right);
 			}
 		}
 
@@ -83,7 +92,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 		return null;
 	}
 
-	protected LiteralExpression parseLiteralExpression (String str) {
+	protected ConstantExpression parseLiteralExpression (String str) {
 		// From https://stackoverflow.com/questions/3543729/how-to-check-that-a-string-is-parseable-to-a-double/22936891:
 		final String Digits     = "(\\p{Digit}+)";
 		final String HexDigits  = "(\\p{XDigit}+)";
@@ -125,7 +134,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 		    "[\\x00-\\x20]*");// Optional trailing "whitespace"
 
 		if (str.matches(fpRegex)) {
-			return new LiteralExpression(str);
+			return new ConstantExpression(str);
 		}
 
 		return null;
