@@ -33,6 +33,6 @@ public class MultiplicationCompoundExpression implements Expression {
 
     @Override
     public Expression differentiate() {
-        return new AdditionCompoundExpression(new MultiplicationCompoundExpression(left, right.differentiate()), new AdditionCompoundExpression(left, right.differentiate()));
+        return new AdditionCompoundExpression(new MultiplicationCompoundExpression(left, right.differentiate()), new MultiplicationCompoundExpression(left.differentiate(), right));
     }
 }
