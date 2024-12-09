@@ -26,6 +26,11 @@ public class DivisionCompoundExpression implements Expression {
 
     @Override
     public Expression differentiate() {
-        return null;
+
+        return new DivisionCompoundExpression(
+                new SubtractionCompoundExpression(
+                        new MultiplicationCompoundExpression(left.differentiate(), right),
+                        new MultiplicationCompoundExpression(left, right.differentiate())),
+                new ExponentialCompoundExpression(right, new ConstantExpression("2")));
     }
 }
