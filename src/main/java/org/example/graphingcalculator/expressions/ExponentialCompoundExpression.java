@@ -24,7 +24,7 @@ public class ExponentialCompoundExpression implements Expression {
         }
         return re + String.format("^\n\t%s\n\t%s\n", leftString, rightString);
 //        return null;
-        return null;
+//        return null;
     }
 
     @Override
