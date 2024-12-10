@@ -16,7 +16,14 @@ public class SubtractionCompoundExpression implements Expression {
 
     @Override
     public String convertToString(int indentLevel) {
-        return null;
+        String leftString = left.convertToString(indentLevel + 1);
+        String rightString = right.convertToString(indentLevel + 1);
+        String re = "";
+        for (int i = 0; i < indentLevel; i++) {
+            re += "\t";
+        }
+        return re + String.format("-\n\t%s\n\t%s\n", leftString, rightString);
+//        return null;
     }
 
     @Override
