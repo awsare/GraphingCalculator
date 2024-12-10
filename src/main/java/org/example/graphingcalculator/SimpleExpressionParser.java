@@ -29,9 +29,11 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 	protected Expression validateExpression(String str) {
 		Expression expression = parseParenthesisExpression(str);
+
 		if (expression == null) {
 			expression = parseAdditionExpression(str);
 		}
+
 		return expression;
 	}
 
