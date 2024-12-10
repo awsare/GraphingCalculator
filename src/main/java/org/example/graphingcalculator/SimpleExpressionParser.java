@@ -19,6 +19,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 */
 	public Expression parse (String str) throws ExpressionParseException {
 		str = str.replaceAll(" ", "");
+		System.out.println(str);
 		Expression expression = validateExpression(str);
 		if (expression == null) {
 			throw new ExpressionParseException("Cannot parse expression: " + str);
@@ -43,8 +44,11 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 		if (str.length() > 2 &&
 			str.charAt(leftParenthesis) == '(' &&
-			str.charAt(rightParenthesis) == ')') {
+			str.charAt(rightParenthesis) == ')' &&
+			str.indexOf('(') == leftParenthesis &&
+			str.indexOf(')') == rightParenthesis) {
 
+			System.out.println("Inside of parenthesis: " + str.substring(leftParenthesis + 1, rightParenthesis));
 			Expression inside = validateExpression(str.substring(leftParenthesis + 1, rightParenthesis));
 
 			return new ParenthesisExpression(inside);
@@ -58,28 +62,24 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 		return expression;
 	}
-	
+
 	protected Expression parseAdditionExpression(String str) {
-
 		for (int i = 0; i < str.length(); i++) {
-			if (str.charAt(i) == '+') {
+			if (str.charAt(i) == '+' || str.charAt(i) == '-') {
+				System.out.println("Left addition: " + str.substring(0, i));
 				Expression left = validateExpression(str.substring(0, i));
+				System.out.println("Right addition: " + str.substring((i+1)));
 				Expression right = validateExpression(str.substring(i+1));
 
 				if (left == null || right == null) {
 					return null;
 				}
 
-				return new AdditionCompoundExpression(left, right);
-			} else if (str.charAt(i) == '-') {
-				Expression left = validateExpression(str.substring(0, i));
-				Expression right = validateExpression(str.substring(i+1));
-
-				if (left == null || right == null) {
-					return null;
+				if (str.charAt(i) == '+') {
+					return new AdditionCompoundExpression(left, right);
+				} else if (str.charAt(i) == '-') {
+					return new SubtractionCompoundExpression(left, right);
 				}
-
-				return new SubtractionCompoundExpression(left, right);
 			}
 		}
 
@@ -88,24 +88,21 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 	protected Expression parseMultiplicationExpression(String str) {
 		for (int i = 0; i < str.length(); i++) {
-			if (str.charAt(i) == '*') {
+			if (str.charAt(i) == '*' || str.charAt(i) == '/') {
+				System.out.println("Left multiplication: " + str.substring(0, i));
 				Expression left = validateExpression(str.substring(0, i));
+				System.out.println("Right multiplication: " + str.substring(i+1));
 				Expression right = validateExpression(str.substring(i+1));
 
 				if (left == null || right == null) {
 					return null;
 				}
 
-				return new MultiplicationCompoundExpression(left, right);
-			} else if (str.charAt(i) == '/') {
-				Expression numerator = validateExpression(str.substring(0, i));
-				Expression denominator = validateExpression(str.substring(i+1));
-
-				if (numerator == null || denominator == null) {
-					return null;
+				if (str.charAt(i) == '*') {
+					return new MultiplicationCompoundExpression(left, right);
+				} else if (str.charAt(i) == '/') {
+					return new DivisionCompoundExpression(left, right);
 				}
-
-				return new DivisionCompoundExpression(numerator, denominator);
 			}
 		}
 
@@ -123,13 +120,13 @@ public class SimpleExpressionParser implements ExpressionParser {
 				}
 
 				return new ExponentialCompoundExpression(base, exponent);
-			} else if (str.substring(i, i + 3).equals("log")) {
-				int leftParenthesis = i + 3;
-				int rightParenthesis = str.length() - 1;
-
-				Expression inside = validateExpression(str.substring(leftParenthesis + 1, rightParenthesis));
-
-				return new NaturalLogarithmicExpression(inside);
+//			} else if (str.substring(i, i + 3).equals("log")) {
+//				int leftParenthesis = i + 3;
+//				int rightParenthesis = str.length() - 1;
+//
+//				Expression inside = validateExpression(str.substring(leftParenthesis + 1, rightParenthesis));
+//
+//				return new NaturalLogarithmicExpression(inside);
 			}
 		}
 
@@ -193,6 +190,6 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 	public static void main (String[] args) throws ExpressionParseException {
 		final ExpressionParser parser = new SimpleExpressionParser();
-		System.out.println(parser.parse("2*(2)").convertToString(0));
+		System.out.println(parser.parse("2+(3)*(x+2)").convertToString(0));
 	}
 }
