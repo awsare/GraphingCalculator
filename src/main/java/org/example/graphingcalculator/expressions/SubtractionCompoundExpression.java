@@ -11,7 +11,7 @@ public class SubtractionCompoundExpression implements Expression {
 
     @Override
     public Expression deepCopy() {
-        return null;
+        return new SubtractionCompoundExpression(left.deepCopy(), right.deepCopy());
     }
 
     @Override

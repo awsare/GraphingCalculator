@@ -11,7 +11,7 @@ public class ExponentialCompoundExpression implements Expression {
 
     @Override
     public Expression deepCopy() {
-        return new ExponentialCompoundExpression(base, exponent);
+        return new ExponentialCompoundExpression(base.deepCopy(), exponent.deepCopy());
     }
 
     @Override

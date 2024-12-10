@@ -45,7 +45,9 @@ public class SimpleExpressionParser implements ExpressionParser {
 			str.charAt(leftParenthesis) == '(' &&
 			str.charAt(rightParenthesis) == ')') {
 
-			return validateExpression(str.substring(leftParenthesis + 1, rightParenthesis));
+			Expression inside = validateExpression(str.substring(leftParenthesis + 1, rightParenthesis));
+
+			return new ParenthesisExpression(inside);
 		}
 
 		Expression expression = parseConstantExpression(str);

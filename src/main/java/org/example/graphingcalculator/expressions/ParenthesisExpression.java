@@ -1,29 +1,29 @@
 package org.example.graphingcalculator.expressions;
 
-public class NaturalLogarithmicExpression implements Expression {
+public class ParenthesisExpression implements Expression {
     private final Expression inside;
 
-    public NaturalLogarithmicExpression(Expression inside) {
+    public ParenthesisExpression(Expression inside) {
         this.inside = inside;
     }
 
     @Override
     public Expression deepCopy() {
-        return new NaturalLogarithmicExpression(inside.deepCopy());
+        return new ParenthesisExpression(inside.deepCopy());
     }
 
     @Override
     public String convertToString(int indentLevel) {
-        return null;
+        return "";
     }
 
     @Override
     public double evaluate(double x) {
-        return Math.log(inside.evaluate(x));
+        return inside.evaluate(x);
     }
 
     @Override
     public Expression differentiate() {
-        return new DivisionCompoundExpression(inside.differentiate(), inside);
+        return inside.differentiate();
     }
 }

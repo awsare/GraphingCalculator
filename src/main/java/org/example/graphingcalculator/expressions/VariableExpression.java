@@ -1,6 +1,7 @@
 package org.example.graphingcalculator.expressions;
 
 public class VariableExpression implements Expression {
+
     @Override
     public Expression deepCopy() {
         return new VariableExpression();

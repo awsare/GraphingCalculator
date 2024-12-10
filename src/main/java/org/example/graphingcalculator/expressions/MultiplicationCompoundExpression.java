@@ -11,7 +11,7 @@ public class MultiplicationCompoundExpression implements Expression {
 
     @Override
     public Expression deepCopy() {
-        return new MultiplicationCompoundExpression(left, right);
+        return new MultiplicationCompoundExpression(left.deepCopy(), right.deepCopy());
     }
 
     @Override
