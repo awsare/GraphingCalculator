@@ -19,7 +19,7 @@ public class ParenthesisExpression implements Expression {
         for (int i = 0; i < indentLevel; i++) {
             re += "\t";
         }
-        return re + String.format("()\n\t%s\n\t%s\n", insideString, "");
+        return re + String.format("()\n%s\n%s\n", insideString, "");
     }
 
     @Override

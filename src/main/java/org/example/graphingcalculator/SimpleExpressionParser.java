@@ -193,6 +193,6 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 	public static void main (String[] args) throws ExpressionParseException {
 		final ExpressionParser parser = new SimpleExpressionParser();
-		System.out.println(parser.parse("2*22").convertToString(0));
+		System.out.println(parser.parse("2*(2)").convertToString(0));
 	}
 }
