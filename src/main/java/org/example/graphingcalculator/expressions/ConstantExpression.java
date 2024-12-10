@@ -4,7 +4,8 @@ public class ConstantExpression implements Expression {
     private final String value;
 
     public ConstantExpression(String value) {
-        this.value = value;
+        // adds decimal place
+        this.value = String.valueOf(Double.parseDouble(value));
     }
 
     @Override
@@ -19,7 +20,6 @@ public class ConstantExpression implements Expression {
             re += "\t";
         }
         return re + value;
-//        return null;
     }
 
     @Override
