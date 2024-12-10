@@ -3,33 +3,35 @@ package org.example.graphingcalculator.expressions;
 import java.util.Arrays;
 
 public class DivisionCompoundExpression implements Expression {
-    private final Expression[] expressions;
+    private final Expression numerator;
+    private final Expression denominator;
 
-    public DivisionCompoundExpression(Expression[] exps) {
-        expressions = Arrays.copyOf(exps, exps.length);
+    public DivisionCompoundExpression(Expression numerator, Expression denominator) {
+        this.numerator = numerator;
+        this.denominator = denominator;
     }
 
     @Override
     public Expression deepCopy() {
-        return null;
+        return new DivisionCompoundExpression(numerator.deepCopy(), denominator.deepCopy());
     }
 
     @Override
     public String convertToString(int indentLevel) {
-        return null;
+        return "";
     }
 
     @Override
     public double evaluate(double x) {
-        double quotient = 1;
-        for (Expression exp : expressions) {
-            quotient /= exp.evaluate(x);
-        }
-        return quotient;
+        return numerator.evaluate(x) / denominator.evaluate(x);
     }
 
     @Override
     public Expression differentiate() {
-        return null;
+        return new DivisionCompoundExpression(
+                new SubtractionCompoundExpression(
+                        new MultiplicationCompoundExpression(numerator.differentiate(), denominator),
+                        new MultiplicationCompoundExpression(numerator, denominator.differentiate())),
+                new ExponentialCompoundExpression(denominator, new ConstantExpression("2")));
     }
 }

@@ -1,12 +1,12 @@
 package org.example.graphingcalculator.expressions;
 
-import java.util.Arrays;
-
 public class SubtractionCompoundExpression implements Expression {
-    private final Expression[] expressions;
+    private final Expression left;
+    private final Expression right;
 
-    public SubtractionCompoundExpression(Expression[] exps) {
-        expressions = Arrays.copyOf(exps, exps.length);
+    public SubtractionCompoundExpression(Expression left, Expression right) {
+        this.left = left;
+        this.right = right;
     }
 
     @Override
@@ -21,15 +21,11 @@ public class SubtractionCompoundExpression implements Expression {
 
     @Override
     public double evaluate(double x) {
-        double difference = 0;
-        for (Expression exp : expressions) {
-            difference -= exp.evaluate(x);
-        }
-        return difference;
+        return left.evaluate(x) - right.evaluate(x);
     }
 
     @Override
     public Expression differentiate() {
-        return null;
+        return new SubtractionCompoundExpression(left.differentiate(), right.differentiate());
     }
 }

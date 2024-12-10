@@ -66,7 +66,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 					return null;
 				}
 
-				return new AdditionCompoundExpression(left, right);
+				return new AdditionCompoundExpression(new Expression[]{left, right});
 			} else if (str.charAt(i) == '-') {
 				Expression left = validateExpression(str.substring(0, i));
 				Expression right = validateExpression(str.substring(i+1));
@@ -75,7 +75,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 					return null;
 				}
 
-				return new SubtractionCompoundExpression(left, right);
+				return new SubtractionCompoundExpression(new Expression[]{left, right});
 			}
 		}
 
@@ -92,7 +92,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 					return null;
 				}
 
-				return new MultiplicationCompoundExpression(left, right);
+				return new MultiplicationCompoundExpression(new Expression[]{left, right});
 			} else if (str.charAt(i) == '/') {
 				Expression numerator = validateExpression(str.substring(0, i));
 				Expression denominator = validateExpression(str.substring(i+1));
@@ -101,7 +101,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 					return null;
 				}
 
-				return new DivisionCompoundExpression(numerator, denominator);
+				return new DivisionCompoundExpression(new Expression[]{numerator, denominator});
 			}
 		}
 

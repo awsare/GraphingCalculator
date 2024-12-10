@@ -1,17 +1,17 @@
 package org.example.graphingcalculator.expressions;
 
-import java.util.Arrays;
-
 public class MultiplicationCompoundExpression implements Expression {
-    private final Expression[] expressions;
+    private final Expression left;
+    private final Expression right;
 
-    public MultiplicationCompoundExpression(Expression[] exps) {
-        expressions = Arrays.copyOf(exps, exps.length);
+    public MultiplicationCompoundExpression(Expression left, Expression right) {
+        this.left = left;
+        this.right = right;
     }
 
     @Override
     public Expression deepCopy() {
-        return null;
+        return new MultiplicationCompoundExpression(left, right);
     }
 
     @Override
@@ -28,15 +28,13 @@ public class MultiplicationCompoundExpression implements Expression {
 
     @Override
     public double evaluate(double x) {
-        double product = 1;
-        for (Expression exp : expressions) {
-            product *= exp.evaluate(x);
-        }
-        return product;
+        return left.evaluate(x) * right.evaluate(x);
     }
 
     @Override
     public Expression differentiate() {
-        return null;
+        return new AdditionCompoundExpression(
+                new MultiplicationCompoundExpression(left, right.differentiate()),
+                new MultiplicationCompoundExpression(left.differentiate(), right));
     }
 }

@@ -1,17 +1,17 @@
 package org.example.graphingcalculator.expressions;
 
-import java.util.Arrays;
-
 public class AdditionCompoundExpression implements Expression {
-    private final Expression[] expressions;
+    private final Expression left;
+    private final Expression right;
 
-    public AdditionCompoundExpression(Expression[] exps) {
-        expressions = Arrays.copyOf(exps, exps.length);
+    public AdditionCompoundExpression(Expression left, Expression right) {
+        this.left = left;
+        this.right = right;
     }
 
     @Override
     public Expression deepCopy() {
-        return null;
+        return new AdditionCompoundExpression(left.deepCopy(), right.deepCopy());
     }
 
     @Override
@@ -28,15 +28,11 @@ public class AdditionCompoundExpression implements Expression {
 
     @Override
     public double evaluate(double x) {
-        double sum = 0;
-        for (Expression exp : expressions) {
-            sum += exp.evaluate(x);
-        }
-        return sum;
+        return left.evaluate(x) + right.evaluate(x);
     }
 
     @Override
     public Expression differentiate() {
-        return null;
+        return new AdditionCompoundExpression(left.differentiate(), right.differentiate());
     }
 }
