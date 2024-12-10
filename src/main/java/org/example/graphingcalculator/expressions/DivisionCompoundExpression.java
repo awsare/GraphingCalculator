@@ -1,36 +1,35 @@
 package org.example.graphingcalculator.expressions;
 
-public class DivisionCompoundExpression implements Expression {
-    private final Expression left;
-    private final Expression right;
+import java.util.Arrays;
 
-    public DivisionCompoundExpression(Expression left, Expression right) {
-        this.left = left;
-        this.right = right;
+public class DivisionCompoundExpression implements Expression {
+    private final Expression[] expressions;
+
+    public DivisionCompoundExpression(Expression[] exps) {
+        expressions = Arrays.copyOf(exps, exps.length);
     }
 
     @Override
     public Expression deepCopy() {
-        return new DivisionCompoundExpression(left.deepCopy(), right.deepCopy());
+        return null;
     }
 
     @Override
     public String convertToString(int indentLevel) {
-        return "";
+        return null;
     }
 
     @Override
     public double evaluate(double x) {
-        return left.evaluate(x) / right.evaluate(x);
+        double quotient = 1;
+        for (Expression exp : expressions) {
+            quotient /= exp.evaluate(x);
+        }
+        return quotient;
     }
 
     @Override
     public Expression differentiate() {
-
-        return new DivisionCompoundExpression(
-                new SubtractionCompoundExpression(
-                        new MultiplicationCompoundExpression(left.differentiate(), right),
-                        new MultiplicationCompoundExpression(left, right.differentiate())),
-                new ExponentialCompoundExpression(right, new ConstantExpression("2")));
+        return null;
     }
 }

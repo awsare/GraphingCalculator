@@ -9,12 +9,12 @@ public class NaturalLogarithmicExpression implements Expression {
 
     @Override
     public Expression deepCopy() {
-        return new NaturalLogarithmicExpression(inside.deepCopy());
+        return null;
     }
 
     @Override
     public String convertToString(int indentLevel) {
-        return "";
+        return null;
     }
 
     @Override
@@ -24,6 +24,6 @@ public class NaturalLogarithmicExpression implements Expression {
 
     @Override
     public Expression differentiate() {
-        return new DivisionCompoundExpression(inside.differentiate(), inside);
+        return new DivisionCompoundExpression(new Expression[]{inside.differentiate(), inside});
     }
 }

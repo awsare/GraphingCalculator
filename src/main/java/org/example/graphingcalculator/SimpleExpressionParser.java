@@ -28,14 +28,14 @@ public class SimpleExpressionParser implements ExpressionParser {
 	}
 
 	protected Expression validateExpression(String str) {
-		Expression expression = parseParentheticalExpression(str);
+		Expression expression = parseParenthesisExpression(str);
 		if (expression == null) {
-			expression = parseAdditiveExpression(str);
+			expression = parseAdditionExpression(str);
 		}
 		return expression;
 	}
 
-	protected Expression parseParentheticalExpression (String str) {
+	protected Expression parseParenthesisExpression(String str) {
 		int leftParenthesis = 0;
 		int rightParenthesis = str.length() - 1;
 
@@ -46,7 +46,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 			return validateExpression(str.substring(leftParenthesis + 1, rightParenthesis));
 		}
 
-		Expression expression = parseLiteralExpression(str);
+		Expression expression = parseConstantExpression(str);
 
 		if (expression == null) {
 			expression = parseVariableExpression(str);
@@ -55,14 +55,14 @@ public class SimpleExpressionParser implements ExpressionParser {
 		return expression;
 	}
 	
-	protected Expression parseAdditiveExpression (String str) {
+	protected Expression parseAdditionExpression(String str) {
 
 		for (int i = 0; i < str.length(); i++) {
 			if (str.charAt(i) == '+') {
 				Expression left = validateExpression(str.substring(0, i));
 				Expression right = validateExpression(str.substring(i+1));
 
-				if (left != null || right != null) {
+				if (left == null || right == null) {
 					return null;
 				}
 
@@ -71,11 +71,61 @@ public class SimpleExpressionParser implements ExpressionParser {
 				Expression left = validateExpression(str.substring(0, i));
 				Expression right = validateExpression(str.substring(i+1));
 
-				if (left != null || right != null) {
+				if (left == null || right == null) {
 					return null;
 				}
 
 				return new SubtractionCompoundExpression(left, right);
+			}
+		}
+
+		return parseMultiplicationExpression(str);
+	}
+
+	protected Expression parseMultiplicationExpression(String str) {
+		for (int i = 0; i < str.length(); i++) {
+			if (str.charAt(i) == '*') {
+				Expression left = validateExpression(str.substring(0, i));
+				Expression right = validateExpression(str.substring(i+1));
+
+				if (left == null || right == null) {
+					return null;
+				}
+
+				return new MultiplicationCompoundExpression(left, right);
+			} else if (str.charAt(i) == '/') {
+				Expression numerator = validateExpression(str.substring(0, i));
+				Expression denominator = validateExpression(str.substring(i+1));
+
+				if (numerator == null || denominator == null) {
+					return null;
+				}
+
+				return new DivisionCompoundExpression(numerator, denominator);
+			}
+		}
+
+		return parseExponentialExpression(str);
+	}
+
+	protected Expression parseExponentialExpression(String str) {
+		for (int i = 0; i < str.length(); i++) {
+			if (str.charAt(i) == '^') {
+				Expression base = validateExpression(str.substring(0, i));
+				Expression exponent = validateExpression(str.substring(i+1));
+
+				if (base == null || exponent == null) {
+					return null;
+				}
+
+				return new ExponentialCompoundExpression(base, exponent);
+			} else if (str.substring(i, i + 3).equals("log")) {
+				int leftParenthesis = i + 3;
+				int rightParenthesis = str.length() - 1;
+
+				Expression inside = validateExpression(str.substring(leftParenthesis + 1, rightParenthesis));
+
+				return new NaturalLogarithmicExpression(inside);
 			}
 		}
 
@@ -89,7 +139,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 		return null;
 	}
 
-	protected ConstantExpression parseLiteralExpression (String str) {
+	protected ConstantExpression parseConstantExpression(String str) {
 		// From https://stackoverflow.com/questions/3543729/how-to-check-that-a-string-is-parseable-to-a-double/22936891:
 		final String Digits     = "(\\p{Digit}+)";
 		final String HexDigits  = "(\\p{XDigit}+)";
