@@ -16,7 +16,14 @@ public class ExponentialCompoundExpression implements Expression {
 
     @Override
     public String convertToString(int indentLevel) {
-//        return "";
+        String leftString = base.convertToString(indentLevel + 1);
+        String rightString = exponent.convertToString(indentLevel + 1);
+        String re = "";
+        for (int i = 0; i < indentLevel; i++) {
+            re += "\t";
+        }
+        return re + String.format("^\n\t%s\n\t%s\n", leftString, rightString);
+//        return null;
         return null;
     }
 

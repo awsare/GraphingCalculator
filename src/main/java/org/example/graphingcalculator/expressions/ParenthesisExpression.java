@@ -14,7 +14,12 @@ public class ParenthesisExpression implements Expression {
 
     @Override
     public String convertToString(int indentLevel) {
-        return "";
+        String insideString = inside.convertToString(indentLevel + 1);
+        String re = "";
+        for (int i = 0; i < indentLevel; i++) {
+            re += "\t";
+        }
+        return re + String.format("()\n\t%s\n\t%s\n", insideString, "");
     }
 
     @Override
