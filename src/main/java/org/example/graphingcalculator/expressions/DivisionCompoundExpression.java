@@ -25,12 +25,13 @@ public class DivisionCompoundExpression implements Expression {
             re += "\t";
         }
         System.out.println("printing a division");
+        re += String.format("/\n%s\n%s", leftString, rightString);
+
         if (indentLevel == 0) {
-            return re + String.format("/\n%s\n%s\n", leftString, rightString);
+            re += "\n";
         }
-        else {
-            return re + String.format("/\n%s\n%s", leftString, rightString);
-        }
+
+        return re;
     }
 
     @Override
