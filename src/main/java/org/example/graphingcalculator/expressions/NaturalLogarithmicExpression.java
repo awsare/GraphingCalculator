@@ -30,6 +30,7 @@ public class NaturalLogarithmicExpression implements Expression {
 
     @Override
     public Expression differentiate() {
-        return new DivisionCompoundExpression(inside.differentiate(), inside);
+        //return new DivisionCompoundExpression(inside.differentiate(), inside);
+        return null;
     }
 }

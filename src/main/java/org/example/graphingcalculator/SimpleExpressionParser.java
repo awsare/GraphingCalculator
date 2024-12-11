@@ -2,6 +2,8 @@ package org.example.graphingcalculator;
 
 import org.example.graphingcalculator.expressions.*;
 
+import java.util.ArrayList;
+
 public class SimpleExpressionParser implements ExpressionParser {
 	/**
 	 * Attempts to create an expression tree from the specified String.
@@ -65,71 +67,93 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 	protected Expression parseAdditionExpression(String str) {
 		for (int i = 0; i < str.length(); i++) {
-			if (str.charAt(i) == '+' || str.charAt(i) == '-') {
-				System.out.println("Left addition: " + str.substring(0, i));
+			if (str.charAt(i) == '+') {
 				Expression left = validateExpression(str.substring(0, i));
-				System.out.println("Right addition: " + str.substring((i+1)));
 				Expression right = validateExpression(str.substring(i+1));
 
 				if (left == null || right == null) {
-					System.out.println("parse add failed");
 					return parseMultiplicationExpression(str);
 				}
 
-				if (str.charAt(i) == '+') {
-					return new AdditionCompoundExpression(left, right);
-				} else if (str.charAt(i) == '-') {
-					return new SubtractionCompoundExpression(left, right);
-				}
+				System.out.println("Left addition: " + str.substring(0, i));
+				System.out.println("Right addition: " + str.substring(i+1));
+
+				return new AdditionCompoundExpression(left, right);
 			}
 		}
 
-		System.out.println("reached end of parse add");
+		for (int i = 0; i < str.length(); i++) {
+			if (str.charAt(i) == '-') {
+				Expression left = validateExpression(str.substring(0, i));
+				Expression right = validateExpression(str.substring(i+1));
+
+				if (left == null || right == null) {
+					return parseMultiplicationExpression(str);
+				}
+
+				System.out.println("Left subtraction: " + str.substring(0, i));
+				System.out.println("Right subtraction: " + str.substring(i+1));
+
+				return new SubtractionCompoundExpression(left, right);
+			}
+		}
+
 		return parseMultiplicationExpression(str);
 	}
 
 	protected Expression parseMultiplicationExpression(String str) {
 		for (int i = 0; i < str.length(); i++) {
-			if (str.charAt(i) == '*' || str.charAt(i) == '/') {
-				System.out.println("Left multiplication: " + str.substring(0, i));
+			if (str.charAt(i) == '*') {
 				Expression left = validateExpression(str.substring(0, i));
-				System.out.println("Right multiplication: " + str.substring(i+1));
 				Expression right = validateExpression(str.substring(i+1));
 
 				if (left == null || right == null) {
-					System.out.println("parse multiply failed");
 					return parseExponentialExpression(str);
 				}
 
-				if (str.charAt(i) == '*') {
-					return new MultiplicationCompoundExpression(left, right);
-				} else if (str.charAt(i) == '/') {
-					return new DivisionCompoundExpression(left, right);
-				}
+				System.out.println("Left multiplication: " + str.substring(0, i));
+				System.out.println("Right multiplication: " + str.substring(i+1));
+
+				return new MultiplicationCompoundExpression(left, right);
 			}
 		}
 
-		System.out.println("reached end of parse multiply");
+		for (int i = 0; i < str.length(); i++) {
+			 if (str.charAt(i) == '/') {
+				Expression left = validateExpression(str.substring(0, i));
+				Expression right = validateExpression(str.substring(i+1));
+
+				if (left == null || right == null) {
+					return parseExponentialExpression(str);
+				}
+
+				System.out.println("Left division: " + str.substring(0, i));
+				System.out.println("Right division: " + str.substring(i+1));
+
+				return new DivisionCompoundExpression(left, right);
+			}
+		}
+
 		return parseExponentialExpression(str);
 	}
 
 	protected Expression parseExponentialExpression(String str) {
 		for (int i = 0; i < str.length(); i++) {
 			if (str.charAt(i) == '^') {
-				System.out.println("Exponent base: " + str.substring(0, i));
 				Expression base = validateExpression(str.substring(0, i));
-				System.out.println("Exponent exponent: " + str.substring((i+1)));
 				Expression exponent = validateExpression(str.substring(i+1));
 
 				if (base == null || exponent == null) {
 					return parseNaturalLogarithmicExpression(str);
 				}
 
+				System.out.println("Exponent base: " + str.substring(0, i));
+				System.out.println("Exponent exponent: " + str.substring(i+1));
+
 				return new ExponentialCompoundExpression(base, exponent);
 			}
 		}
 
-		System.out.println("reached end of parse exponential");
 		return parseNaturalLogarithmicExpression(str);
 	}
 
@@ -211,6 +235,8 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 	public static void main (String[] args) throws ExpressionParseException {
 		final ExpressionParser parser = new SimpleExpressionParser();
-		System.out.println(parser.parse("2*(3+2)*log(3+2)*3^(x)+(x+2+2)").convertToString(0));
+//		Expression e = parser.parse("1./(1. + 5^(-1*x))");
+		Expression e = parser.parse("(5*(5))");
+		System.out.println(e.convertToString(0));
 	}
 }
