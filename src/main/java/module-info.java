@@ -3,6 +3,8 @@ module org.example.graphingcalculator {
     requires javafx.fxml;
     requires junit;
     requires org.junit.jupiter.api;
+    requires org.junit.platform.commons;
+    requires org.junit.platform.engine;
 
 
     opens org.example.graphingcalculator to javafx.fxml;

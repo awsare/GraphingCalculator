@@ -22,8 +22,8 @@ public class SubtractionCompoundExpression implements Expression {
         for (int i = 0; i < indentLevel; i++) {
             re += "\t";
         }
+        System.out.println("printing a subtraction");
         return re + String.format("-\n%s\n%s\n", leftString, rightString);
-//        return null;
     }
 
     @Override

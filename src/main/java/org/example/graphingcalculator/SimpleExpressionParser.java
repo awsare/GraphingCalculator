@@ -72,7 +72,8 @@ public class SimpleExpressionParser implements ExpressionParser {
 				Expression right = validateExpression(str.substring(i+1));
 
 				if (left == null || right == null) {
-					return null;
+					System.out.println("parse add failed");
+					return parseMultiplicationExpression(str);
 				}
 
 				if (str.charAt(i) == '+') {
@@ -83,6 +84,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 			}
 		}
 
+		System.out.println("reached end of parse add");
 		return parseMultiplicationExpression(str);
 	}
 
@@ -95,7 +97,8 @@ public class SimpleExpressionParser implements ExpressionParser {
 				Expression right = validateExpression(str.substring(i+1));
 
 				if (left == null || right == null) {
-					return null;
+					System.out.println("parse multiply failed");
+					return parseExponentialExpression(str);
 				}
 
 				if (str.charAt(i) == '*') {
@@ -106,13 +109,16 @@ public class SimpleExpressionParser implements ExpressionParser {
 			}
 		}
 
+		System.out.println("reached end of parse multiply");
 		return parseExponentialExpression(str);
 	}
 
 	protected Expression parseExponentialExpression(String str) {
 		for (int i = 0; i < str.length(); i++) {
 			if (str.charAt(i) == '^') {
+				System.out.println("Exponent base: " + str.substring(0, i));
 				Expression base = validateExpression(str.substring(0, i));
+				System.out.println("Exponent exponent: " + str.substring((i+1)));
 				Expression exponent = validateExpression(str.substring(i+1));
 
 				if (base == null || exponent == null) {
@@ -130,6 +136,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 			}
 		}
 
+		System.out.println("reached end of parse exponential");
 		return null;
 	}
 

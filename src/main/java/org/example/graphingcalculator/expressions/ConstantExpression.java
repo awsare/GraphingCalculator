@@ -19,6 +19,7 @@ public class ConstantExpression implements Expression {
         for (int i = 0; i < indentLevel; i++) {
             re += "\t";
         }
+        System.out.println("printing a constant");
         return re + value;
     }
 
