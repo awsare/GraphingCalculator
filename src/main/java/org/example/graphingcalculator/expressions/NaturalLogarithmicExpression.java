@@ -14,7 +14,13 @@ public class NaturalLogarithmicExpression implements Expression {
 
     @Override
     public String convertToString(int indentLevel) {
-        return null;
+        String insideString = inside.convertToString(indentLevel + 1);
+        String re = "";
+        for (int i = 0; i < indentLevel; i++) {
+            re += "\t";
+        }
+        System.out.println("printing a log");
+        return re + String.format("log\n%s\n", insideString);
     }
 
     @Override

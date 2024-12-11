@@ -122,22 +122,36 @@ public class SimpleExpressionParser implements ExpressionParser {
 				Expression exponent = validateExpression(str.substring(i+1));
 
 				if (base == null || exponent == null) {
-					return null;
+					return parseNaturalLogarithmicExpression(str);
 				}
 
 				return new ExponentialCompoundExpression(base, exponent);
-//			} else if (str.substring(i, i + 3).equals("log")) {
-//				int leftParenthesis = i + 3;
-//				int rightParenthesis = str.length() - 1;
-//
-//				Expression inside = validateExpression(str.substring(leftParenthesis + 1, rightParenthesis));
-//
-//				return new NaturalLogarithmicExpression(inside);
 			}
 		}
 
 		System.out.println("reached end of parse exponential");
-		return null;
+		return parseNaturalLogarithmicExpression(str);
+	}
+
+	protected Expression parseNaturalLogarithmicExpression(String str) {
+		try {
+			if (str.substring(0, 3).equals("log")) {
+				int leftParenthesis = 3;
+				int rightParenthesis = str.length() - 1;
+
+				Expression inside = validateExpression(str.substring(leftParenthesis + 1, rightParenthesis));
+
+				if (inside == null) {
+					return null;
+				}
+
+				return new NaturalLogarithmicExpression(inside);
+			}
+
+			return null;
+		} catch (StringIndexOutOfBoundsException e) {
+			return null;
+		}
 	}
 
 	protected VariableExpression parseVariableExpression (String str) {
@@ -197,6 +211,6 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 	public static void main (String[] args) throws ExpressionParseException {
 		final ExpressionParser parser = new SimpleExpressionParser();
-		System.out.println(parser.parse("x+2").convertToString(0));
+		System.out.println(parser.parse("2*(3+2)*log(3+2)*3^(x)+(x+2+2)").convertToString(0));
 	}
 }
