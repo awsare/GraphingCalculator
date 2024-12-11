@@ -46,9 +46,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 		if (str.length() > 2 &&
 			str.charAt(leftParenthesis) == '(' &&
-			str.charAt(rightParenthesis) == ')' &&
-			str.indexOf('(') == leftParenthesis &&
-			str.indexOf(')') == rightParenthesis) {
+			str.charAt(rightParenthesis) == ')') {
 
 			System.out.println("Inside of parenthesis: " + str.substring(leftParenthesis + 1, rightParenthesis));
 			Expression inside = validateExpression(str.substring(leftParenthesis + 1, rightParenthesis));
