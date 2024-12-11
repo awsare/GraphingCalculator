@@ -70,7 +70,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 				Expression right = validateExpression(str.substring(i+1));
 
 				if (left == null || right == null) {
-					return parseMultiplicationExpression(str);
+					break;
 				}
 
 				System.out.println("Left addition: " + str.substring(0, i));
@@ -86,7 +86,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 				Expression right = validateExpression(str.substring(i+1));
 
 				if (left == null || right == null) {
-					return parseMultiplicationExpression(str);
+					break;
 				}
 
 				System.out.println("Left subtraction: " + str.substring(0, i));
@@ -106,7 +106,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 				Expression right = validateExpression(str.substring(i+1));
 
 				if (left == null || right == null) {
-					return parseExponentialExpression(str);
+					break;
 				}
 
 				System.out.println("Left multiplication: " + str.substring(0, i));
@@ -122,7 +122,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 				Expression right = validateExpression(str.substring(i+1));
 
 				if (left == null || right == null) {
-					return parseExponentialExpression(str);
+					break;
 				}
 
 				System.out.println("Left division: " + str.substring(0, i));
@@ -142,7 +142,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 				Expression exponent = validateExpression(str.substring(i+1));
 
 				if (base == null || exponent == null) {
-					return parseNaturalLogarithmicExpression(str);
+					break;
 				}
 
 				System.out.println("Exponent base: " + str.substring(0, i));
@@ -234,7 +234,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 	public static void main (String[] args) throws ExpressionParseException {
 		final ExpressionParser parser = new SimpleExpressionParser();
 //		Expression e = parser.parse("1./(1. + 5^(-1*x))");
-		Expression e = parser.parse("(5*(5))");
-		System.out.println(e.convertToString(0));
+		Expression e = parser.parse("2/2/2");
+		System.out.println(e.evaluate(0));
 	}
 }
