@@ -19,7 +19,7 @@ public class VariableExpression implements Expression {
 
     @Override
     public double evaluate(double x) {
-        return 0;
+        return x;
     }
 
     @Override
