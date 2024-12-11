@@ -20,7 +20,7 @@ public class NaturalLogarithmicExpression implements Expression {
             re += "\t";
         }
         System.out.println("printing a log");
-        return re + String.format("log\n%s\n", insideString);
+        return re + String.format("log\n%s", insideString);
     }
 
     @Override

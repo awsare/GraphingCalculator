@@ -23,7 +23,12 @@ public class SubtractionCompoundExpression implements Expression {
             re += "\t";
         }
         System.out.println("printing a subtraction");
-        return re + String.format("-\n%s\n%s\n", leftString, rightString);
+        if (indentLevel == 0) {
+            return re + String.format("-\n%s\n%s\n", leftString, rightString);
+        }
+        else {
+            return re + String.format("-\n%s\n%s", leftString, rightString);
+        }
     }
 
     @Override
