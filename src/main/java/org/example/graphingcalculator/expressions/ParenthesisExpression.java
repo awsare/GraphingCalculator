@@ -20,7 +20,7 @@ public class ParenthesisExpression implements Expression {
             re += "\t";
         }
         System.out.println("printing a parenthesis");
-        return re + String.format("()\n%s\n%s\n", insideString, "");
+        return re + String.format("()\n%s", insideString);
     }
 
     @Override
