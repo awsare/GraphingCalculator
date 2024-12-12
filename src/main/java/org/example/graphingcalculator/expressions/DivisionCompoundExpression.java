@@ -43,7 +43,7 @@ public class DivisionCompoundExpression implements Expression {
     }
 
     @Override
-    public Expression differentiate() throws ExpressionParseException {
+    public Expression differentiate() throws UnsupportedOperationException {
         return new DivisionCompoundExpression(
                 new SubtractionCompoundExpression(
                         new MultiplicationCompoundExpression(numerator.differentiate(), denominator),

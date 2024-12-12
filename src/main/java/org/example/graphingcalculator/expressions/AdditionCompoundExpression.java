@@ -59,7 +59,7 @@ public class AdditionCompoundExpression implements Expression {
      * @return the derivative expression of this addition expression
      */
     @Override
-    public Expression differentiate() throws ExpressionParseException {
+    public Expression differentiate() throws UnsupportedOperationException {
         return new AdditionCompoundExpression(left.differentiate(), right.differentiate());
     }
 }

@@ -26,7 +26,7 @@ public class VariableExpression implements Expression {
     }
 
     @Override
-    public Expression differentiate() throws ExpressionParseException {
+    public Expression differentiate() throws UnsupportedOperationException {
         return new ConstantExpression("1");
     }
 }

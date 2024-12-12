@@ -41,7 +41,7 @@ public class MultiplicationCompoundExpression implements Expression {
     }
 
     @Override
-    public Expression differentiate() throws ExpressionParseException {
+    public Expression differentiate() throws UnsupportedOperationException {
         return new AdditionCompoundExpression(
                 new MultiplicationCompoundExpression(left, right.differentiate()),
                 new MultiplicationCompoundExpression(left.differentiate(), right));

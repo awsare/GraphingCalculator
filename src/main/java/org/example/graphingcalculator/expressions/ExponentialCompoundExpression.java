@@ -41,7 +41,7 @@ public class ExponentialCompoundExpression implements Expression {
     }
 
     @Override
-    public Expression differentiate() throws ExpressionParseException {
+    public Expression differentiate() throws UnsupportedOperationException {
         // If function f(x)=C^h(x) (where C is a positive constant), then its derivative is f'(x)=(log C) * C^h(x) * h'(x).
         if (base instanceof ConstantExpression) {
             return new MultiplicationCompoundExpression(
@@ -66,6 +66,6 @@ public class ExponentialCompoundExpression implements Expression {
                             base.differentiate()));
         }
 
-        throw new ExpressionParseException("Cannot parse exponential of two functions.");
+        throw new UnsupportedOperationException("Cannot parse exponential of two functions.");
     }
 }

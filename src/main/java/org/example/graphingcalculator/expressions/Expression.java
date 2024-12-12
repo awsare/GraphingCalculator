@@ -36,5 +36,5 @@ public interface Expression {
 	 * representing the derivative of this expression.
 	 * @return the derivative of this expression
 	 */
-	public Expression differentiate () throws ExpressionParseException;
+	public Expression differentiate () throws UnsupportedOperationException;
 }
