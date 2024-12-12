@@ -1,5 +1,7 @@
 package org.example.graphingcalculator.expressions;
 
+import org.example.graphingcalculator.ExpressionParseException;
+
 public class ExponentialCompoundExpression implements Expression {
     private final Expression base;
     private final Expression exponent;
@@ -39,7 +41,7 @@ public class ExponentialCompoundExpression implements Expression {
     }
 
     @Override
-    public Expression differentiate() {
+    public Expression differentiate() throws ExpressionParseException {
         // If function f(x)=C^h(x) (where C is a positive constant), then its derivative is f'(x)=(log C) * C^h(x) * h'(x).
         if (base instanceof ConstantExpression) {
             return new MultiplicationCompoundExpression(
@@ -51,15 +53,19 @@ public class ExponentialCompoundExpression implements Expression {
                             exponent.differentiate()));
         }
 
-        // If function f(x)=g(x)^C (where C is a constant), then its derivative is f'(x)=C * g(x)^(C-1) * g'(x).
-        return new MultiplicationCompoundExpression(
-                exponent,
-                new MultiplicationCompoundExpression(
-                        new ExponentialCompoundExpression(
-                                base,
-                                new SubtractionCompoundExpression(
-                                        exponent,
-                                        new ConstantExpression("1"))),
-                        base.differentiate()));
+        if (exponent instanceof ConstantExpression) {
+            // If function f(x)=g(x)^C (where C is a constant), then its derivative is f'(x)=C * g(x)^(C-1) * g'(x).
+            return new MultiplicationCompoundExpression(
+                    exponent,
+                    new MultiplicationCompoundExpression(
+                            new ExponentialCompoundExpression(
+                                    base,
+                                    new SubtractionCompoundExpression(
+                                            exponent,
+                                            new ConstantExpression("1"))),
+                            base.differentiate()));
+        }
+
+        throw new ExpressionParseException("Cannot parse exponential of two functions.");
     }
 }

@@ -56,7 +56,9 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 			Expression inside = validateExpression(str.substring(leftParenthesis + 1, rightParenthesis));
 
-			expression = new ParenthesisExpression(inside);
+			if (inside != null) {
+				expression = new ParenthesisExpression(inside);
+			}
 		}
 
 		if (expression == null) {
@@ -235,7 +237,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 	public static void main (String[] args) throws ExpressionParseException {
 		final ExpressionParser parser = new SimpleExpressionParser();
-		Expression e = parser.parse("2/2/2");
+		Expression e = parser.parse("(x) * (x)");
 		System.out.println(e.evaluate(0));
 	}
 }

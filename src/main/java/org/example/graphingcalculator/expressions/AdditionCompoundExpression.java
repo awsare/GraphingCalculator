@@ -1,5 +1,7 @@
 package org.example.graphingcalculator.expressions;
 
+import org.example.graphingcalculator.ExpressionParseException;
+
 public class AdditionCompoundExpression implements Expression {
     private final Expression left;
     private final Expression right;
@@ -57,7 +59,7 @@ public class AdditionCompoundExpression implements Expression {
      * @return the derivative expression of this addition expression
      */
     @Override
-    public Expression differentiate() {
+    public Expression differentiate() throws ExpressionParseException {
         return new AdditionCompoundExpression(left.differentiate(), right.differentiate());
     }
 }

@@ -1,5 +1,7 @@
 package org.example.graphingcalculator.expressions;
 
+import org.example.graphingcalculator.ExpressionParseException;
+
 public class ParenthesisExpression implements Expression {
     private final Expression inside;
 
@@ -34,7 +36,7 @@ public class ParenthesisExpression implements Expression {
     }
 
     @Override
-    public Expression differentiate() {
+    public Expression differentiate() throws ExpressionParseException {
         return inside.differentiate();
     }
 }

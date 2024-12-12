@@ -2,6 +2,8 @@ package org.example.graphingcalculator.expressions;//import javafx.scene.layout.
 //import javafx.scene.paint.Color;
 //import javafx.scene.Node;
 
+import org.example.graphingcalculator.ExpressionParseException;
+
 /** Note: You may <b>not</b> change or remove any of the methods listed below. */
 public interface Expression {
 	/**
@@ -34,5 +36,5 @@ public interface Expression {
 	 * representing the derivative of this expression.
 	 * @return the derivative of this expression
 	 */
-	public Expression differentiate ();
+	public Expression differentiate () throws ExpressionParseException;
 }

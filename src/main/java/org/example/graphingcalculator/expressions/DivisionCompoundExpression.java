@@ -1,5 +1,7 @@
 package org.example.graphingcalculator.expressions;
 
+import org.example.graphingcalculator.ExpressionParseException;
+
 import java.util.Arrays;
 
 public class DivisionCompoundExpression implements Expression {
@@ -41,7 +43,7 @@ public class DivisionCompoundExpression implements Expression {
     }
 
     @Override
-    public Expression differentiate() {
+    public Expression differentiate() throws ExpressionParseException {
         return new DivisionCompoundExpression(
                 new SubtractionCompoundExpression(
                         new MultiplicationCompoundExpression(numerator.differentiate(), denominator),

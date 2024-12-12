@@ -1,5 +1,7 @@
 package org.example.graphingcalculator.expressions;
 
+import org.example.graphingcalculator.ExpressionParseException;
+
 public class VariableExpression implements Expression {
 
     @Override
@@ -24,7 +26,7 @@ public class VariableExpression implements Expression {
     }
 
     @Override
-    public Expression differentiate() {
+    public Expression differentiate() throws ExpressionParseException {
         return new ConstantExpression("1");
     }
 }
