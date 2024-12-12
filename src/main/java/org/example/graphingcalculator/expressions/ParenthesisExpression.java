@@ -37,6 +37,6 @@ public class ParenthesisExpression implements Expression {
 
     @Override
     public Expression differentiate() throws UnsupportedOperationException {
-        return inside.differentiate();
+        return inside.deepCopy().differentiate();
     }
 }

@@ -37,6 +37,6 @@ public class NaturalLogarithmicExpression implements Expression {
 
     @Override
     public Expression differentiate() throws UnsupportedOperationException {
-        return new DivisionCompoundExpression(inside.differentiate(), inside);
+        return new DivisionCompoundExpression(inside.deepCopy().differentiate(), inside.deepCopy());
     }
 }

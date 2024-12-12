@@ -60,6 +60,6 @@ public class AdditionCompoundExpression implements Expression {
      */
     @Override
     public Expression differentiate() throws UnsupportedOperationException {
-        return new AdditionCompoundExpression(left.differentiate(), right.differentiate());
+        return new AdditionCompoundExpression(left.deepCopy().differentiate(), right.deepCopy().differentiate());
     }
 }

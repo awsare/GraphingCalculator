@@ -46,8 +46,8 @@ public class DivisionCompoundExpression implements Expression {
     public Expression differentiate() throws UnsupportedOperationException {
         return new DivisionCompoundExpression(
                 new SubtractionCompoundExpression(
-                        new MultiplicationCompoundExpression(numerator.differentiate(), denominator),
-                        new MultiplicationCompoundExpression(numerator, denominator.differentiate())),
-                new ExponentialCompoundExpression(denominator, new ConstantExpression("2")));
+                        new MultiplicationCompoundExpression(numerator.deepCopy().differentiate(), denominator.deepCopy()),
+                        new MultiplicationCompoundExpression(numerator.deepCopy(), denominator.deepCopy().differentiate())),
+                new ExponentialCompoundExpression(denominator.deepCopy(), new ConstantExpression("2")));
     }
 }

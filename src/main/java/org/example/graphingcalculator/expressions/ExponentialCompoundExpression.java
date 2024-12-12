@@ -56,14 +56,14 @@ public class ExponentialCompoundExpression implements Expression {
         if (exponent instanceof ConstantExpression) {
             // If function f(x)=g(x)^C (where C is a constant), then its derivative is f'(x)=C * g(x)^(C-1) * g'(x).
             return new MultiplicationCompoundExpression(
-                    exponent,
+                    exponent.deepCopy(),
                     new MultiplicationCompoundExpression(
                             new ExponentialCompoundExpression(
-                                    base,
+                                    base.deepCopy(),
                                     new SubtractionCompoundExpression(
-                                            exponent,
+                                            exponent.deepCopy(),
                                             new ConstantExpression("1"))),
-                            base.differentiate()));
+                            base.deepCopy().differentiate()));
         }
 
         throw new UnsupportedOperationException("Cannot parse exponential of two functions.");
