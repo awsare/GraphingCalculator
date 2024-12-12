@@ -24,7 +24,6 @@ public class DivisionCompoundExpression implements Expression {
         for (int i = 0; i < indentLevel; i++) {
             re += "\t";
         }
-        System.out.println("printing a division");
         re += String.format("/\n%s\n%s", leftString, rightString);
 
         if (indentLevel == 0) {

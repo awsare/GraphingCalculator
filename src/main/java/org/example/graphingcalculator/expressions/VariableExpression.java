@@ -13,7 +13,6 @@ public class VariableExpression implements Expression {
         for (int i = 0; i < indentLevel; i++) {
             re += "\t";
         }
-        System.out.println("printing a var");
         return re + "x";
     }
 

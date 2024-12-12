@@ -22,7 +22,6 @@ public class AdditionCompoundExpression implements Expression {
         for (int i = 0; i < indentLevel; i++) {
             re += "\t";
         }
-        System.out.println("printing an addition");
         re += String.format("+\n%s\n%s", leftString, rightString);
 
         if (indentLevel == 0) {

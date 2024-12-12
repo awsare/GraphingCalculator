@@ -19,7 +19,6 @@ public class NaturalLogarithmicExpression implements Expression {
         for (int i = 0; i < indentLevel; i++) {
             re += "\t";
         }
-        System.out.println("printing a log");
         return re + String.format("log\n%s", insideString);
     }
 
