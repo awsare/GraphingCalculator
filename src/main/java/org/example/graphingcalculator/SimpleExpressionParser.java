@@ -30,6 +30,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 		return expression;
 	}
 
+	// S -> A | P
 	protected Expression validateExpression(String str) {
 		Expression expression = parseParenthesisExpression(str);
 
@@ -40,20 +41,25 @@ public class SimpleExpressionParser implements ExpressionParser {
 		return expression;
 	}
 
+	// P -> (S) | L | V
 	protected Expression parseParenthesisExpression(String str) {
+		Expression expression = null;
+
 		int leftParenthesis = 0;
 		int rightParenthesis = str.length() - 1;
 
 		if (str.length() > 2 &&
-			str.charAt(leftParenthesis) == '(' &&
-			str.charAt(rightParenthesis) == ')') {
+				str.charAt(leftParenthesis) == '(' &&
+				str.charAt(rightParenthesis) == ')') {
 
 			Expression inside = validateExpression(str.substring(leftParenthesis + 1, rightParenthesis));
 
-			return new ParenthesisExpression(inside);
+			expression = new ParenthesisExpression(inside);
 		}
 
-		Expression expression = parseConstantExpression(str);
+		if (expression == null) {
+			expression = parseConstantExpression(str);
+		}
 
 		if (expression == null) {
 			expression = parseVariableExpression(str);
@@ -62,8 +68,11 @@ public class SimpleExpressionParser implements ExpressionParser {
 		return expression;
 	}
 
+	// A -> A+M | A-M | M
 	protected Expression parseAdditionExpression(String str) {
-		for (int i = 0; i < str.length(); i++) {
+		Expression expression = null;
+
+		for (int i = str.length() - 1; i >= 0; i--) {
 			if (str.charAt(i) == '+') {
 				Expression left = validateExpression(str.substring(0, i));
 				Expression right = validateExpression(str.substring(i+1));
@@ -72,28 +81,39 @@ public class SimpleExpressionParser implements ExpressionParser {
 					continue;
 				}
 
-				return new AdditionCompoundExpression(left, right);
+				expression = new AdditionCompoundExpression(left, right);
+				break;
 			}
 		}
 
-		for (int i = 0; i < str.length(); i++) {
-			if (str.charAt(i) == '-') {
-				Expression left = validateExpression(str.substring(0, i));
-				Expression right = validateExpression(str.substring(i+1));
+		if (expression == null) {
+			for (int i = str.length() - 1; i >= 0; i--) {
+				if (str.charAt(i) == '-') {
+					Expression left = validateExpression(str.substring(0, i));
+					Expression right = validateExpression(str.substring(i+1));
 
-				if (left == null || right == null) {
-					continue;
+					if (left == null || right == null) {
+						continue;
+					}
+
+					expression = new SubtractionCompoundExpression(left, right);
+					break;
 				}
-
-				return new SubtractionCompoundExpression(left, right);
 			}
 		}
 
-		return parseMultiplicationExpression(str);
+		if (expression == null) {
+			expression = parseMultiplicationExpression(str);
+		}
+
+		return expression;
 	}
 
+	// M -> M*E | M/E | E
 	protected Expression parseMultiplicationExpression(String str) {
-		for (int i = 0; i < str.length(); i++) {
+		Expression expression = null;
+
+		for (int i = str.length() - 1; i >= 0; i--) {
 			if (str.charAt(i) == '*') {
 				Expression left = validateExpression(str.substring(0, i));
 				Expression right = validateExpression(str.substring(i+1));
@@ -102,27 +122,38 @@ public class SimpleExpressionParser implements ExpressionParser {
 					continue;
 				}
 
-				return new MultiplicationCompoundExpression(left, right);
+				expression = new MultiplicationCompoundExpression(left, right);
+				break;
 			}
 		}
 
-		for (int i = 0; i < str.length(); i++) {
-			 if (str.charAt(i) == '/') {
-				Expression left = validateExpression(str.substring(0, i));
-				Expression right = validateExpression(str.substring(i+1));
+		if (expression == null) {
+			for (int i = str.length() - 1; i >= 0; i--) {
+				if (str.charAt(i) == '/') {
+					Expression left = validateExpression(str.substring(0, i));
+					Expression right = validateExpression(str.substring(i+1));
 
-				if (left == null || right == null) {
-					continue;
+					if (left == null || right == null) {
+						continue;
+					}
+
+					expression = new DivisionCompoundExpression(left, right);
+					break;
 				}
-
-				return new DivisionCompoundExpression(left, right);
 			}
 		}
 
-		return parseExponentialExpression(str);
+		if (expression == null) {
+			expression = parseExponentialExpression(str);
+		}
+
+		return expression;
 	}
 
+	// E -> P^E | P | log(P)
 	protected Expression parseExponentialExpression(String str) {
+		Expression expression = null;
+
 		for (int i = 0; i < str.length(); i++) {
 			if (str.charAt(i) == '^') {
 				Expression base = validateExpression(str.substring(0, i));
@@ -132,40 +163,36 @@ public class SimpleExpressionParser implements ExpressionParser {
 					continue;
 				}
 
-				return new ExponentialCompoundExpression(base, exponent);
+				expression = new ExponentialCompoundExpression(base, exponent);
+				break;
 			}
 		}
 
-		Expression expression = parseParenthesisExpression(str);
+		if (expression == null) {
+			expression = parseParenthesisExpression(str);
+		}
 
 		if (expression == null) {
-			expression = parseNaturalLogarithmicExpression(str);
+			try {
+				if (str.startsWith("log")) {
+					int leftParenthesis = 3;
+					int rightParenthesis = str.length() - 1;
+
+					Expression inside = validateExpression(str.substring(leftParenthesis + 1, rightParenthesis));
+
+					if (inside != null) {
+						expression = new NaturalLogarithmicExpression(inside);
+					}
+				}
+			} catch (StringIndexOutOfBoundsException e) {
+				// log can't be found and expression is already null, do nothing
+			}
 		}
 
 		return expression;
 	}
 
-	protected Expression parseNaturalLogarithmicExpression(String str) {
-		try {
-			if (str.substring(0, 3).equals("log")) {
-				int leftParenthesis = 3;
-				int rightParenthesis = str.length() - 1;
-
-				Expression inside = validateExpression(str.substring(leftParenthesis + 1, rightParenthesis));
-
-				if (inside == null) {
-					return null;
-				}
-
-				return new NaturalLogarithmicExpression(inside);
-			}
-
-			return null;
-		} catch (StringIndexOutOfBoundsException e) {
-			return null;
-		}
-	}
-
+	// V -> x
 	protected VariableExpression parseVariableExpression (String str) {
 		if (str.equals("x")) {
 			return new VariableExpression();
@@ -173,6 +200,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 		return null;
 	}
 
+	// L -> <float>
 	protected ConstantExpression parseConstantExpression(String str) {
 		// From https://stackoverflow.com/questions/3543729/how-to-check-that-a-string-is-parseable-to-a-double/22936891:
 		final String Digits     = "(\\p{Digit}+)";
@@ -224,7 +252,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 	public static void main (String[] args) throws ExpressionParseException {
 		final ExpressionParser parser = new SimpleExpressionParser();
 //		Expression e = parser.parse("1./(1. + 5^(-1*x))");
-		Expression e = parser.parse("(2/2)/2");
+		Expression e = parser.parse("2/2/2");
 		System.out.println(e.evaluate(1));
 	}
 }
