@@ -21,9 +21,11 @@ public class DivisionCompoundExpression implements Expression {
         String leftString = numerator.convertToString(indentLevel + 1);
         String rightString = denominator.convertToString(indentLevel + 1);
         String re = "";
+
         for (int i = 0; i < indentLevel; i++) {
             re += "\t";
         }
+
         re += String.format("/\n%s\n%s", leftString, rightString);
 
         if (indentLevel == 0) {

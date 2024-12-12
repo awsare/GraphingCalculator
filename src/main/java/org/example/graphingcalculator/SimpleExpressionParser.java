@@ -45,9 +45,11 @@ public class SimpleExpressionParser implements ExpressionParser {
 	protected Expression parseParenthesisExpression(String str) {
 		Expression expression = null;
 
+		// store indexes of supposed left and right parenthesis
 		int leftParenthesis = 0;
 		int rightParenthesis = str.length() - 1;
 
+		// if there are parenthesis in assumed positions, return parenthesis expression
 		if (str.length() > 2 &&
 				str.charAt(leftParenthesis) == '(' &&
 				str.charAt(rightParenthesis) == ')') {
@@ -72,33 +74,23 @@ public class SimpleExpressionParser implements ExpressionParser {
 	protected Expression parseAdditionExpression(String str) {
 		Expression expression = null;
 
+		// loop through the string backwards and check for addition/subtraction symbols
 		for (int i = str.length() - 1; i >= 0; i--) {
-			if (str.charAt(i) == '+') {
+			if (str.charAt(i) == '+' || str.charAt(i) == '-') {
 				Expression left = validateExpression(str.substring(0, i));
 				Expression right = validateExpression(str.substring(i+1));
 
+				// if left or right is invalid then move on
 				if (left == null || right == null) {
 					continue;
 				}
 
-				expression = new AdditionCompoundExpression(left, right);
-				break;
-			}
-		}
-
-		if (expression == null) {
-			for (int i = str.length() - 1; i >= 0; i--) {
-				if (str.charAt(i) == '-') {
-					Expression left = validateExpression(str.substring(0, i));
-					Expression right = validateExpression(str.substring(i+1));
-
-					if (left == null || right == null) {
-						continue;
-					}
-
+				if (str.charAt(i) == '+') {
+					expression = new AdditionCompoundExpression(left, right);
+				} else {
 					expression = new SubtractionCompoundExpression(left, right);
-					break;
 				}
+				break;
 			}
 		}
 
@@ -113,33 +105,23 @@ public class SimpleExpressionParser implements ExpressionParser {
 	protected Expression parseMultiplicationExpression(String str) {
 		Expression expression = null;
 
+		// loop through the string backwards and check for multiplication/division symbols
 		for (int i = str.length() - 1; i >= 0; i--) {
-			if (str.charAt(i) == '*') {
+			if (str.charAt(i) == '*' || str.charAt(i) == '/') {
 				Expression left = validateExpression(str.substring(0, i));
 				Expression right = validateExpression(str.substring(i+1));
 
+				// if left or right is invalid then move on
 				if (left == null || right == null) {
 					continue;
 				}
 
-				expression = new MultiplicationCompoundExpression(left, right);
-				break;
-			}
-		}
-
-		if (expression == null) {
-			for (int i = str.length() - 1; i >= 0; i--) {
-				if (str.charAt(i) == '/') {
-					Expression left = validateExpression(str.substring(0, i));
-					Expression right = validateExpression(str.substring(i+1));
-
-					if (left == null || right == null) {
-						continue;
-					}
-
+				if (str.charAt(i) == '*') {
+					expression = new MultiplicationCompoundExpression(left, right);
+				} else {
 					expression = new DivisionCompoundExpression(left, right);
-					break;
 				}
+				break;
 			}
 		}
 
@@ -154,11 +136,13 @@ public class SimpleExpressionParser implements ExpressionParser {
 	protected Expression parseExponentialExpression(String str) {
 		Expression expression = null;
 
+		// loop through the string forwards and check for exponential symbols
 		for (int i = 0; i < str.length(); i++) {
 			if (str.charAt(i) == '^') {
 				Expression base = validateExpression(str.substring(0, i));
 				Expression exponent = validateExpression(str.substring(i+1));
 
+				// if base or exponent is invalid then move on
 				if (base == null || exponent == null) {
 					continue;
 				}
@@ -251,8 +235,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 	public static void main (String[] args) throws ExpressionParseException {
 		final ExpressionParser parser = new SimpleExpressionParser();
-//		Expression e = parser.parse("1./(1. + 5^(-1*x))");
 		Expression e = parser.parse("2/2/2");
-		System.out.println(e.evaluate(1));
+		System.out.println(e.evaluate(0));
 	}
 }

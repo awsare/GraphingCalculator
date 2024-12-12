@@ -16,9 +16,11 @@ public class ConstantExpression implements Expression {
     @Override
     public String convertToString(int indentLevel) {
         String re = "";
+
         for (int i = 0; i < indentLevel; i++) {
             re += "\t";
         }
+
         return re + value;
     }
 

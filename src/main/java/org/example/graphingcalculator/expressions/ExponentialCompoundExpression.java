@@ -19,9 +19,11 @@ public class ExponentialCompoundExpression implements Expression {
         String leftString = base.convertToString(indentLevel + 1);
         String rightString = exponent.convertToString(indentLevel + 1);
         String re = "";
+
         for (int i = 0; i < indentLevel; i++) {
             re += "\t";
         }
+
         re += String.format("^\n%s\n%s", leftString, rightString);
 
         if (indentLevel == 0) {
