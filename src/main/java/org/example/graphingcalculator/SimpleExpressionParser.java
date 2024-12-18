@@ -134,7 +134,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 		return expression;
 	}
 
-	// E -> P^E | P | log(P)
+	// E -> P^E | P | log(P) | T
 	protected Expression parseExponentialExpression(String str) {
 		Expression expression = null;
 
@@ -155,10 +155,6 @@ public class SimpleExpressionParser implements ExpressionParser {
 		}
 
 		if (expression == null) {
-			expression = parseParenthesisExpression(str);
-		}
-
-		if (expression == null) {
 			try {
 				if (str.startsWith("log")) {
 					int leftParenthesis = 3;
@@ -172,6 +168,49 @@ public class SimpleExpressionParser implements ExpressionParser {
 				}
 			} catch (StringIndexOutOfBoundsException e) {
 				// log can't be found and expression is already null, do nothing
+			}
+		}
+
+		if (expression == null) {
+			expression = parseTrigonometricFunction(str);
+		}
+
+		return expression;
+	}
+
+	// T -> sin(P) | cos(P)
+	protected Expression parseTrigonometricFunction(String str) {
+		Expression expression = null;
+
+		try {
+			if (str.startsWith("sin")) {
+				int leftParenthesis = 3;
+				int rightParenthesis = str.length() - 1;
+
+				Expression inside = validateExpression(str.substring(leftParenthesis + 1, rightParenthesis));
+
+				if (inside != null) {
+					expression = new SineExpression(inside);
+				}
+			}
+		} catch (StringIndexOutOfBoundsException e) {
+			// sin can't be found and expression is already null, do nothing
+		}
+
+		if (expression == null) {
+			try {
+				if (str.startsWith("cos")) {
+					int leftParenthesis = 3;
+					int rightParenthesis = str.length() - 1;
+
+					Expression inside = validateExpression(str.substring(leftParenthesis + 1, rightParenthesis));
+
+					if (inside != null) {
+						expression = new CosineExpression(inside);
+					}
+				}
+			} catch (StringIndexOutOfBoundsException e) {
+				// cos can't be found and expression is already null, do nothing
 			}
 		}
 
